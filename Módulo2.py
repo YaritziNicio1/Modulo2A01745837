@@ -16,11 +16,12 @@ df.drop("Id", axis=1, inplace=True)
 
 
 #Se cambian los valores string por valores numéricos para que pueda funcionar el modelo
+#Se utiliza un diccionario donde cada una de las variables se cambia por un valor entre 1 y 3
 df['Species']=df['Species'].replace({"Iris-setosa":1,"Iris-versicolor":2,"Iris-virginica":3})
 X=df.drop("Species", axis = 1) #Variables de entrada
 y=df['Species'] #Variable de salida
 
-#Dividir los datos para test y train utilizando Train test split
+#Dividir los datos para test y train utilizando Train test split, siendo un tamaño del test del 20% y un train del 80% del total dde los datos
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=32)
 
 
@@ -69,11 +70,12 @@ def accuracy(y_true, y_pred):
     return accuracy
 
 #Se manda a llamar a la función  que predice con los datos de X_train, y_train y X_test con 3 vecinos más cercanos (el valor de k)
-predictions = prediccion(X_train, y_train, X_test, k=2)
+predictions = prediccion(X_train, y_train, X_test, k=3) #El valor de k está definido por las variables que 
 #Se manda a llamar a la función correspondiente para el cálculo de accuracy 
 acc = accuracy(y_test, predictions)
 #Imprime ambos llamados anteriormente mencionados 
 print("Predicción:", predictions[0])
+print(predictions)
 print("Precisión:", acc)
 #se hace una copia de los valores que se tienen en el data set de X_test
 df_pred = X_test.copy()
@@ -81,4 +83,6 @@ df_pred = X_test.copy()
 df_pred["Species"]=predictions
 #Graficamos los valores predecidos anteriormente con los valores de entrada 
 plt.scatter(x=df_pred["SepalLengthCm"],y=df_pred["SepalWidthCm"], c= df_pred["Species"])
+plt.xlabel('SepalLengthCm')
+plt.ylabel('SepalWidthCm')
 plt.show()
